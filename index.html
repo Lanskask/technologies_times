@@ -3,21 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Popular Technologies Timeline</title>
+  <title>Technology Age Tracker</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       margin-top: 20px;
     }
+    input[type="text"] {
+      width: 50%;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
     table {
-      width: 80%;
-      margin: auto;
+      margin: 0 auto;
       border-collapse: collapse;
+      width: 80%;
+      margin-bottom: 40px;
     }
     th, td {
       border: 1px solid #ddd;
       padding: 8px;
+      text-align: center;
     }
     th {
       background-color: #f2f2f2;
@@ -25,75 +32,24 @@
   </style>
 </head>
 <body>
-<h1>Popular Technologies Timeline</h1>
-<table>
-  <thead>
-  <tr>
-    <th>Technology</th>
-    <th>Creation Date</th>
-    <th>Time Passed</th>
-  </tr>
-  </thead>
-  <tbody id="tech-list">
-  <!-- Content will be filled dynamically -->
-  </tbody>
-</table>
+<h1>Technology Age Tracker</h1>
+<input type="text" id="search" placeholder="Search for technology..." onkeyup="searchTech()">
+
+<div id="content"></div>
 
 <script>
   const technologies = [
-    { name: "FastAPI", date: "2018-12-05", category: "framework" },
-    { name: "React", date: "2013-03-01" },
-    { name: "AngularJS", date: "2010-10-20" },
-    { name: "Vue.js", date: "2014-02-01" },
-    { name: "Node.js", date: "2009-05-27" },
-    { name: "Kubernetes", date: "2014-06-07" },
-    { name: "Docker", date: "2013-03-20" },
-    { name: "Terraform", date: "2014-07-28" },
-    { name: "Flutter", date: "2017-05-01" },
-    { name: "TensorFlow", date: "2015-11-09" },
-    { name: "PyTorch", date: "2016-09-01" },
-    { name: "GraphQL", date: "2015-07-01" },
-    { name: "Elasticsearch", date: "2010-02-08" },
-    { name: "MongoDB", date: "2009-02-11" },
-    { name: "Kafka", date: "2011-01-01" },
-    { name: "Redis", date: "2009-05-10" },
-    { name: "PostgreSQL", date: "1996-07-08" },
-    { name: "MySQL", date: "1995-05-23" },
-    { name: "React Native", date: "2015-03-26" },
-    { name: "Bootstrap", date: "2011-08-19" },
-    { name: "jQuery", date: "2006-08-26" },
-    { name: "ASP.NET Core", date: "2016-06-01" },
-    { name: "Spring Boot", date: "2014-04-01" },
-    { name: "Django", date: "2005-07-21" },
-    { name: "Ruby on Rails", date: "2005-12-13" },
-    { name: "Laravel", date: "2011-06-09" },
-    { name: "Go (Golang)", date: "2012-03-10" },
-    { name: "Rust", date: "2010-05-15" },
-    { name: "Swift", date: "2014-06-02" },
-    { name: "TypeScript", date: "2012-10-01" },
-    { name: "Git", date: "2005-04-07" },
-    { name: "Jenkins", date: "2004-02-01" },
-    { name: "Ansible", date: "2012-02-20" },
-    { name: "Chef", date: "2009-01-01" },
-    { name: "Puppet", date: "2005-06-01" },
-    { name: "Prometheus", date: "2012-07-19" },
-    { name: "Zabbix", date: "2001-04-07" },
-    { name: "Nagios", date: "2002-03-01" },
-    { name: "Elixir", date: "2011-01-01" },
-    { name: "R", date: "1993-08-01" },
-    { name: "Hadoop", date: "2006-04-01" },
-    { name: "Apache Spark", date: "2014-05-01" },
-    { name: "Flink", date: "2014-04-01" },
-    { name: "Cassandra", date: "2008-07-01" },
-    { name: "Nginx", date: "2004-10-04" },
-    { name: "Ionic", date: "2013-11-01" },
-    { name: "Cordova", date: "2012-07-01" },
-    { name: "Redux", date: "2015-06-01" },
-    { name: "Next.js", date: "2016-10-01" },
-    { name: "Svelte", date: "2016-11-01" }
+    { name: "FastAPI", date: "2018-12-05", category: "Framework" },
+    { name: "React", date: "2013-03-01", category: "Web Development" },
+    { name: "Python", date: "1991-02-01", category: "Programming Language" },
+    { name: "Docker", date: "2013-03-20", category: "Containerization" },
+    { name: "MongoDB", date: "2009-02-11", category: "Database" },
+    { name: "TensorFlow", date: "2015-11-09", category: "Machine Learning" },
+    { name: "Vue.js", date: "2014-02-01", category: "Web Development" },
+    { name: "Kubernetes", date: "2014-06-07", category: "DevOps" },
   ];
 
-  function calculateTimePassed(creationDate) {
+  function calculateAge(creationDate) {
     const creation = new Date(creationDate);
     const now = new Date();
     const diff = new Date(now - creation);
@@ -103,24 +59,69 @@
     return `${years} years, ${months} months, ${days} days`;
   }
 
-  function updateTechnologies() {
-    const tbody = document.getElementById("tech-list");
-    tbody.innerHTML = "";
-    technologies.forEach(tech => {
-      const timePassed = calculateTimePassed(tech.date);
-      const row = `
-          <tr>
-            <td>${tech.name}</td>
-            <td>${tech.date}</td>
-            <td>${timePassed}</td>
-          </tr>
+  function groupTechnologiesByCategory(techList) {
+    return techList.reduce((groups, tech) => {
+      const category = tech.category;
+      if (!groups[category]) {
+        groups[category] = [];
+      }
+      groups[category].push(tech);
+      return groups;
+    }, {});
+  }
+
+  function createTechTables() {
+    const contentDiv = document.getElementById('content');
+    const groupedTechnologies = groupTechnologiesByCategory(technologies);
+    contentDiv.innerHTML = '';
+
+    Object.keys(groupedTechnologies).forEach(category => {
+      const categoryHeading = document.createElement('h2');
+      categoryHeading.textContent = category;
+      contentDiv.appendChild(categoryHeading);
+
+      const table = document.createElement('table');
+      table.innerHTML = `
+          <thead>
+            <tr>
+              <th>Technology</th>
+              <th>Creation Date</th>
+              <th>Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${groupedTechnologies[category].map(tech => `
+              <tr>
+                <td>${tech.name}</td>
+                <td>${tech.date}</td>
+                <td>${calculateAge(tech.date)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
         `;
-      tbody.innerHTML += row;
+      contentDiv.appendChild(table);
     });
   }
 
-  setInterval(updateTechnologies, 1000);
-  updateTechnologies();
+  function updateAges() {
+    createTechTables();
+  }
+
+  function searchTech() {
+    const filter = document.getElementById('search').value.toLowerCase();
+    const rows = document.querySelectorAll('#content table tbody tr');
+    rows.forEach(row => {
+      const techName = row.cells[0].textContent.toLowerCase();
+      if (techName.includes(filter)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  createTechTables();
+  setInterval(updateAges, 1000 * 60); // Update every minute
 </script>
 </body>
 </html>
