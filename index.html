@@ -128,12 +128,17 @@
 
     const tables = document.querySelectorAll('#content table');
     tables.forEach(table => {
+      const heading = table.previousElementSibling;
+      const tbody = table.querySelector('tbody');
+      const rows = tbody.querySelectorAll('tr');
+      const hasVisibleRows = Array.from(rows).some(row => row.style.display !== 'none');
+
       if (visibleCategoryCount === 1 && !table.contains(visibleCategory)) {
-        table.previousElementSibling.style.display = 'none';
+        heading.style.display = 'none';
         table.style.display = 'none';
       } else {
-        table.previousElementSibling.style.display = '';
-        table.style.display = '';
+        heading.style.display = hasVisibleRows ? '' : 'none';
+        table.style.display = hasVisibleRows ? '' : 'none';
       }
     });
   }
