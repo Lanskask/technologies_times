@@ -37,18 +37,8 @@
 
 <div id="content"></div>
 
+<script src="technologies.js"></script>
 <script>
-  const technologies = [
-    { name: "FastAPI", date: "2018-12-05", category: "Framework" },
-    { name: "React", date: "2013-03-01", category: "Web Development" },
-    { name: "Python", date: "1991-02-01", category: "Programming Language" },
-    { name: "Docker", date: "2013-03-20", category: "Containerization" },
-    { name: "MongoDB", date: "2009-02-11", category: "Database" },
-    { name: "TensorFlow", date: "2015-11-09", category: "Machine Learning" },
-    { name: "Vue.js", date: "2014-02-01", category: "Web Development" },
-    { name: "Kubernetes", date: "2014-06-07", category: "DevOps" },
-  ];
-
   function calculateAge(creationDate) {
     const creation = new Date(creationDate);
     const now = new Date();
