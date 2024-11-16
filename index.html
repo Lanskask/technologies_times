@@ -110,12 +110,30 @@
   function searchTech() {
     const filter = document.getElementById('search').value.toLowerCase();
     const rows = document.querySelectorAll('#content table tbody tr');
+    let visibleCategoryCount = 0;
+    let visibleCategory = null;
+
     rows.forEach(row => {
       const techName = row.cells[0].textContent.toLowerCase();
       if (techName.includes(filter)) {
         row.style.display = '';
+        if (!visibleCategory || visibleCategory !== row.closest('table')) {
+          visibleCategoryCount++;
+          visibleCategory = row.closest('table');
+        }
       } else {
         row.style.display = 'none';
+      }
+    });
+
+    const tables = document.querySelectorAll('#content table');
+    tables.forEach(table => {
+      if (visibleCategoryCount === 1 && !table.contains(visibleCategory)) {
+        table.previousElementSibling.style.display = 'none';
+        table.style.display = 'none';
+      } else {
+        table.previousElementSibling.style.display = '';
+        table.style.display = '';
       }
     });
   }
