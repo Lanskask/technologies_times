@@ -60,12 +60,21 @@
     }, {});
   }
 
+  function sortGroupsByImportance(groups) {
+    return Object.entries(groups).sort(([, a], [, b]) => {
+      const maxImportanceA = Math.max(...a.map(tech => tech.importance));
+      const maxImportanceB = Math.max(...b.map(tech => tech.importance));
+      return  maxImportanceA - maxImportanceB;
+    });
+  }
+
   function createTechTables() {
     const contentDiv = document.getElementById('content');
     const groupedTechnologies = groupTechnologiesByCategory(technologies);
+    const sortedGroups = sortGroupsByImportance(groupedTechnologies);
     contentDiv.innerHTML = '';
 
-    Object.keys(groupedTechnologies).forEach(category => {
+    sortedGroups.forEach(([category, techList]) => {
       const categoryHeading = document.createElement('h2');
       categoryHeading.textContent = category;
       contentDiv.appendChild(categoryHeading);
@@ -80,7 +89,7 @@
             </tr>
           </thead>
           <tbody>
-            ${groupedTechnologies[category].map(tech => `
+            ${techList.map(tech => `
               <tr>
                 <td>${tech.name}</td>
                 <td>${tech.date}</td>
