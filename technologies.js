@@ -1,4 +1,4 @@
-const technologies = [
+export const technologies = [
     { name: "FastAPI", date: "2018-12-05", long_date: "December 5, 2018", category: "Backend", importance: 2, tags: new Set(["backend", "python", "framework"]) },
     { name: "React", date: "2013-05-29", long_date: "May 29, 2013", category: "Frontend", importance: 3, tags: new Set(["frontend", "javascript", "library"]) },
     { name: "Angular", date: "2016-09-14", long_date: "September 14, 2016", category: "Frontend", importance: 3, tags: new Set(["frontend", "javascript", "framework"]) },
